@@ -1,63 +1,45 @@
 ﻿#include <iostream>
-#include <string.h>
-#include <vector>
-#include <algorithm>
-#include <math.h>
-#include <string>
-#include <string.h>
-#include <queue>
 
-//출력 형식 잘보기!!!
 using namespace std;
 
-int T;
-int N;
+int Answer;
+int dp[100001];
 
-bool solution(vector<string> phone_book)
+int dfs(int N)
 {
-	bool answer = true;
+	int temp;
 
-	sort(phone_book.begin(), phone_book.end());
-	for (int i = 0; i < phone_book.size() - 1; i++)
+	if (dp[N])
+		return dp[N];
+	else
 	{
-		int c_size = phone_book[i].size();
-		int n_size = phone_book[i + 1].size();
-
-		if (c_size < n_size)
-		{
-			string t_word;
-			t_word = phone_book[i + 1].substr(0, c_size);
-			if (phone_book[i] == t_word)
-			{
-				answer = false;
-				break;
-			}
-		}
+		if (N % 2 == 0)
+			temp += dfs(N / 2) + 1;
+		else
+			temp += dfs(N + 1) + 1;
 	}
-	return answer;
 }
 
-int main()
+int main(int argc, char** argv)
 {
+	int T, test_case;
+
 	cin >> T;
+	dp[1] = 1;
 
-	while (T--)
+	for (test_case = 0; test_case < T; test_case++)
 	{
-		cin >> N;
 
-		vector<string> p;
-		p.clear();
+		int N1, N2;
+		Answer = 0;
 
-		for (int i = 0; i < N; i++)
+		for (int i = N1; i <= N2; i++)
 		{
-			string word;
-			cin >> word;
-			p.push_back(word);
+			int temp = dfs(i);
 		}
-
-		if (solution(p))
-			cout << "YES" << endl;
-		else
-			cout << "NO" << endl;
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
 	}
+
+	return 0;//Your program should return 0 on normal termination.
 }
