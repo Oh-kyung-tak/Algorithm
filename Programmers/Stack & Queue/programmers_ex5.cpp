@@ -1,27 +1,47 @@
 #include <string>
 #include <vector>
+#include <queue>
+#include <iostream>
 
 using namespace std;
 
-vector<int> solution(vector<int> heights) {
+vector<int> solution(vector<int> progresses, vector<int> speeds) {
 	vector<int> answer;
-	answer.push_back(0);
+	queue<int> q;
 
-	for (int i = 1; i < heights.size(); i++)
+	int size = progresses.size();
+
+	for (int i = 0; i < size; i++)
 	{
-		bool ck = false;
-		for (int j = i - 1; j >= 0; j--)
+		int temp = (100 - progresses[i]) / speeds[i];
+
+		if ((100 - progresses[i]) % speeds[i] != 0)
+			temp++;
+
+		q.push(temp);
+	}
+
+	int cnt = 1;
+	int current = q.front();
+	q.pop();
+
+	while (!q.empty())
+	{
+		if (q.front() <= current)
 		{
-			if (heights[j] > heights[i])
-			{
-				ck = true;
-				answer.push_back(j + 1);
-				break;
-			}
+			cnt++;
+		}
+		else
+		{
+			answer.push_back(cnt);
+			cnt = 1;
+			current = q.front();
 		}
 
-		if (ck == false)
-			answer.push_back(0);
+		q.pop();
 	}
+
+	answer.push_back(cnt);
+
 	return answer;
 }
